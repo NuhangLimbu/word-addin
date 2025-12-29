@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1">
+  <Id>550e8400-e29b-41d4-a716-446655440000</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>WordAutomate</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="Word Automate" />
+  <Description DefaultValue="Auto-fill, summarize, and auto-correct" />
+  <IconUrl DefaultValue="https://localhost:3000/icon-32.png"/>
+  
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://localhost:3000"/>
+  </DefaultSettings>
+  
+  <Permissions>ReadWriteDocument</Permissions>
+</OfficeApp>
