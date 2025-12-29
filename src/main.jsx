@@ -7,7 +7,7 @@ console.log('🚀 Word AI Automate Add-in starting...')
 
 // Function to load Office.js dynamically
 const loadOfficeJs = () => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     // Check if already loaded
     if (window.Office) {
       console.log('✅ Office.js already loaded')
@@ -28,10 +28,9 @@ const loadOfficeJs = () => {
     script.onerror = (error) => {
       console.warn('⚠️ Office.js failed to load:', error)
       console.log('Running in development mode (no Word integration)')
-      resolve(false) // Resolve with false, don't reject
+      resolve(false)
     }
     
-    // Add to document head
     document.head.appendChild(script)
   })
 }
@@ -64,7 +63,6 @@ const initializeApp = async () => {
     }
   } catch (error) {
     console.error('❌ Error during initialization:', error)
-    // Still render the app for debugging
     renderApp()
   }
 }
@@ -91,8 +89,8 @@ if (import.meta.env.DEV) {
       onReady: (callback) => {
         console.log('Mock Office.onReady called')
         setTimeout(() => callback({ 
-          host: Office.HostType.Word || 'Word',
-          platform: Office.PlatformType.PC || 'PC'
+          host: 'Word',
+          platform: 'PC'
         }), 100)
       },
       context: {
@@ -128,7 +126,10 @@ if (import.meta.env.DEV) {
               getSelection: () => ({
                 load: () => {},
                 text: 'Mock selected text for development',
-                insertText: () => console.log('Mock insertText called')
+                insertText: (text, location) => {
+                  console.log(`Mock insertText: "${text}" at ${location}`)
+                  return {}
+                }
               }),
               load: () => {},
               title: 'Mock Document'
@@ -136,6 +137,15 @@ if (import.meta.env.DEV) {
             sync: () => Promise.resolve()
           }
           await callback(mockContext)
+        }
+      }
+      
+      // Mock Gemini API for development
+      window.mockGemini = {
+        call: async (prompt, text) => {
+          console.log('Mock Gemini called with:', prompt.substring(0, 50) + '...')
+          await new Promise(resolve => setTimeout(resolve, 1000))
+          return `This is a MOCK AI response for development.\n\nPrompt: ${prompt.substring(0, 100)}\n\nText length: ${text.length} chars`
         }
       }
     }
